@@ -1,21 +1,56 @@
 class Mundo{
     constructor(ancho=40){
         this.ancho = Number(ancho) || 40;
-        this.matriz = [];
-        this.crearMatriz();
+        this.tablero = [];
+        this.crearTablero();
     }
 
     /*Este método crea una matriz de tamaño ancho x ancho inicializada con null
     y se van rellenando las casillas con un bucle que recorre las filas y columnas */
-    crearMatriz(){
-        this.matriz = new Array(this.ancho);
+    crearTablero(){
+        this.tablero = new Array(this.ancho);
         for(let fila=0; fila < this.ancho; fila++){
-            this.matriz[fila] = new Array(this.ancho);
+            this.tablero[fila] = new Array(this.ancho);
             for(let columna=0; columna < this.ancho; columna++){
-                this.matriz[i][j] = null;
+                this.tablero[fila][columna] = new Celula;
             }
         }
     }
+
+    /*esto implica que el mundo se comporte como una esfera, evita índices
+     negativos y que se salen por la derecha*/
+    getCelula(fila, columna){
+        const f = (fila + this.ancho) % this.ancho;
+        const c = (columna + this.ancho) % this.ancho;
+        return this.tablero[f][c];
+    }
+
+
+
+    //--------------------FILAS--------------------
+    /*para numerar las casillas de alrededor de una celula dada lo haremos dandole valor negativo
+    a las casillas de arriba/izq.; arriba y arriba/der., neutro a las de izq. y der. y positivo abajo izq; abajo y abajo der.*/
+    //--------------------COLUMNAS--------------------
+    /* valor negativo a las casillas de arriba/izq.; izq y abajo/izq., neutro a las de arriba y de bajo y positivo al resto*/
+    contarVecinasVivas(fila, columna){
+        let vivas = 0;
+        //este for anidado recorre las 8 posiciones alrededor de la celula según el criterio anteriormente descrito
+        for(let i = -1; i <= 1; i++){
+            for(let j = -1; j <= 1; j++){
+                if(i === 0 && j === 0){
+                    continue;//como es la posicion de la propia celula la saltamos
+                }if(this.getCelula(fila + i, columna + j).estado){
+                    //si en la posicion hay una celula en estado viva aumentamos el contador
+                    vivas++;
+                }
+            }
+        }
+        return vivas;
+    }
+
+    
+
+
+
 }
 
-//ola ola ola
