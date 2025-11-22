@@ -22,7 +22,6 @@ let dibujarEstado = true; // true para dibujar vivas, false para muertas
 //PARA DIBUJAR EL MUNDO
 //clearRect(x,y,alto,ancho) borra una zona rectangular.
 contexto.clearRect(0, 0, canvas.width, canvas.height);
-mundo.getCelula(10, 10).setEstado(true); 
 mundo.dibujar(contexto, tamanoCelda);
 
 //JUEGO
@@ -80,19 +79,7 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 
 //-------------------EVENTOS RATÓN--------------------
-canvas.addEventListener("mousedown", (e) => {
-    ratonPresionado = true;
-    modificarCelula(e);
-});
 
-canvas.addEventListener("mouseup", () => {
-    ratonPresionado = false;
-});
 
-canvas.addEventListener("mousemove", (e) => {
-    mostrarInfoCelula(e);
-    if (ratonPresionado) modificarCelula(e);
-});
-
-dibujarMundo();
+dibujar(contexto, tamanoCelda);
 console.log("Juego de la Vida cargado correctamente.");
