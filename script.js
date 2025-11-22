@@ -50,21 +50,25 @@ function reanudarSimulacion() {
 
 
 
-
+let teclas = [];
 window.addEventListener("keydown", manejaTeclado, false);
-var teclas = [];
+window.addEventListener("keyup", limpiaTeclado, false);
 function manejaTeclado(e) {
     teclas[e.code] = true;
     // Ctrl + Shift + 5
-    if (teclas[‘ControlLeft’] && teclas[‘ShifLeft’] && teclas[‘Digit5’]) {
+    if (teclas['ControlLeft'] && teclas['ShiftLeft'] && teclas['Digit5']) {
         console.log("Pulsado Ctrl + Shift + 5");
     }
     // Ctrl + f
-    if (teclas[‘ControlLeft’] && teclas[‘KeyF’]) {
+    if (teclas['ControlLeft'] && teclas['KeyF']) {
         console.log("Pulsado Ctrl + f");
         // cancelar acción por omisión del navegador
         e.preventDefault();
     }
+}
+function limpiaTeclado(e) {
+// pone a false la tecla liberada
+teclas[e.code] = false;
 }
 
 
