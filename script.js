@@ -22,6 +22,7 @@ let dibujarEstado = true; // true para dibujar vivas, false para muertas
 //PARA DIBUJAR EL MUNDO
 //clearRect(x,y,alto,ancho) borra una zona rectangular.
 contexto.clearRect(0, 0, canvas.width, canvas.height);
+mundo.getCelula(10, 10).setEstado(true); 
 mundo.dibujar(contexto, tamanoCelda);
 
 //JUEGO
