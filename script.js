@@ -9,10 +9,10 @@ let N = 40;
 let velocidad = 10;  
 //CREAMOS EL PROPIO MUNDO      
 let mundo = new Mundo(N);  
-//cuanto ocupa cada celda
+//cuanto ocupa cada celula=celda
 let tamanoCelda = canvas.width / N;
 
-let temporizador;       //para controlar la simulación
+var temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
 
 //EMPIEZO A PINTAR CÉLULAS
@@ -79,6 +79,10 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 
 //-------------------EVENTOS RATÓN--------------------
+
+
+
+
 
 
 mundo.dibujar(contexto, tamanoCelda);

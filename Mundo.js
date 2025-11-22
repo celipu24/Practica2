@@ -1,6 +1,8 @@
 class Mundo{
-    constructor(ancho=40){
+
+    constructor(ancho = 40, alto = 40) {
         this.ancho = Number(ancho) || 40;
+        this.alto = Number(alto) || 40;
         this.tablero = [];
         this.crearTablero();
     }
@@ -9,7 +11,7 @@ class Mundo{
     y se van rellenando las casillas con un bucle que recorre las filas y columnas */
     crearTablero(){
         this.tablero = new Array(this.ancho);
-        for(let fila=0; fila < this.ancho; fila++){
+        for(let fila=0; fila < this.alto; fila++){
             this.tablero[fila] = new Array(this.ancho);
             for(let columna=0; columna < this.ancho; columna++){
                 this.tablero[fila][columna] = new Celula;
@@ -20,7 +22,7 @@ class Mundo{
     /*esto implica que el mundo se comporte como una esfera, evita índices
      negativos y que se salen por la derecha*/
     getCelula(fila, columna){
-        const f = (fila + this.ancho) % this.ancho;
+        const f = (fila + this.alto) % this.alto;
         const c = (columna + this.ancho) % this.ancho;
         return this.tablero[f][c];
     }
