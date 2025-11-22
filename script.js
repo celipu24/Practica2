@@ -27,7 +27,7 @@ mundo.dibujar(contexto, tamanoCelda);
 //JUEGO
 function pasoSimulacion() {
     mundo.actualizarTablero();
-    dibujarMundo();
+    mundo.dibujar(contexto, tamanoCelda);
 }
 
 function iniciarSimulacion() {
@@ -81,5 +81,5 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 //-------------------EVENTOS RATÓN--------------------
 
 
-dibujar(contexto, tamanoCelda);
+mundo.dibujar(contexto, tamanoCelda);
 console.log("Juego de la Vida cargado correctamente.");
