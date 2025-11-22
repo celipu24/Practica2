@@ -47,9 +47,8 @@ function reanudarSimulacion() {
 
 
 
-
-
-
+//-------------------EVENTOS TECLADO--------------------
+//detección de varias teclas a la vez
 let teclas = [];
 window.addEventListener("keydown", manejaTeclado, false);
 window.addEventListener("keyup", limpiaTeclado, false);
@@ -71,5 +70,28 @@ function limpiaTeclado(e) {
 teclas[e.code] = false;
 }
 
+//-------------------EVENTOS BOTONES--------------------
+//añadimos los eventos de botón
+document.getElementById("Iniciar").onclick = () => iniciarSimulacion();
+document.getElementById("Detener").onclick = () => detenerSimulacion();
+document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
-//-------------------BOTONES--------------------
+
+
+//-------------------EVENTOS RATÓN--------------------
+canvas.addEventListener("mousedown", (e) => {
+    ratonPresionado = true;
+    modificarCelula(e);
+});
+
+canvas.addEventListener("mouseup", () => {
+    ratonPresionado = false;
+});
+
+canvas.addEventListener("mousemove", (e) => {
+    mostrarInfoCelula(e);
+    if (ratonPresionado) modificarCelula(e);
+});
+
+dibujarMundo();
+console.log("Juego de la Vida cargado correctamente.");

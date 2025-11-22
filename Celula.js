@@ -30,4 +30,36 @@ class Celula{
             this.time += 1; // si esta viva aumenta el tiempo que ha estado viva
         }
     }
+
+
+    modificarCelula(e) {
+        let rect = canvas.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+
+        let fila = Math.floor(y / tamCelda);
+        let col = Math.floor(x / tamCelda);
+
+        let cel = mundo.getCelula(fila, col);
+
+        cel.setEstado(!cel.estado); // alternar viva/muerta
+        dibujarMundo();
+    }
+
+    mostrarInfoCelula(e) {
+        let rect = canvas.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+
+        let fila = Math.floor(y / tamCelda);
+        let col = Math.floor(x / tamCelda);
+
+        let cel = mundo.getCelula(fila, col);
+
+        // Mostrar estado en consola o en un <div>
+        document.querySelector("p").textContent =
+            `Célula [${fila},${col}] → Estado: ${cel.estado ? "viva" : "muerta"}, Tiempo: ${cel.time}`;
+    }
+
+
 }
