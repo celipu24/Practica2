@@ -48,59 +48,9 @@ class Mundo{
         return vivas;
     }
 
-
-    //Actualizamos el estado del tablero
-    actualizarTablero(){
-        for(let fila = 0; fila < this.ancho; fila++){
-            for(let columna = 0; columna < this.ancho; columna++){
-                //recorremos las "casillas" del tablero para actualizar el estado de las celulas
-                const celula = this.getCelula(fila, columna);
-                const vecinasVivas = this.contarVecinasVivas(fila, columna);
-                //aquí estamos actualizando el estado siguiente que tienen las celulas vecinas.
-                celula.calcularSiguienteEstado(vecinasVivas);
-            }
-        }
-        for (let fila = 0; fila < this.ancho; fila++){
-            for (let columna = 0; columna < this.ancho; columna++){
-                /*separamos la actualización en 2 partes para que primero se actualice el estado siguiente
-                y aquí se actualice en tiempo real.*/
-                this.tablero[fila][columna].actualizarEstado();
-            }
-        }
-    }
-
-    dibujar(ctx, tamCelda) {
-        for (let fila = 0; fila < this.ancho; fila++) {
-            for (let col = 0; col < this.ancho; col++) {
-                const celula = this.getCelula(fila, col);
-                ctx.fillStyle = celula.estado ? "black" : "white";
-                ctx.fillRect(col * tamCelda, fila * tamCelda, tamCelda, tamCelda);
-                ctx.strokeStyle = "#ccc";
-                ctx.strokeRect(col * tamCelda, fila * tamCelda, tamCelda, tamCelda);
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
 }
-
 
