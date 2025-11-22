@@ -1,0 +1,71 @@
+//Accedemos al motor gráfico ("contexto")
+var canvas = document.getElementById("lienzo");
+var contexto = canvas.getContext("2d");
+
+//VARIABLES GLOBALES
+//N es el tamaño del mundo
+let N = 40;
+//velocidad a la que se actualiza el mundo (en sg)                
+let velocidad = 10;  
+//CREAMOS EL PROPIO MUNDO      
+let mundo = new Mundo(N);  
+//cuanto ocupa cada celda
+let tamanoCelda = canvas.width / N;
+
+let temporizador;       //para controlar la simulación
+let simulando = false; // indica si la simulación está en marcha
+
+//EMPIEZO A PINTAR CÉLULAS
+let click = false;
+let dibujarEstado = true; // true para dibujar vivas, false para muertas
+
+//PARA DIBUJAR EL MUNDO
+//clearRect(x,y,alto,ancho) borra una zona rectangular.
+contexto.clearRect(0, 0, canvas.width, canvas.height);
+mundo.dibujar(contexto, tamanoCelda);
+
+//JUEGO
+function pasoSimulacion() {
+    mundo.actualizarTablero();
+    dibujarMundo();
+}
+
+function iniciarSimulacion() {
+    if (simulando) return;
+    simulando = true;
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad);
+}
+
+function detenerSimulacion() {
+    simulando = false;
+    clearInterval(temporizador);
+}
+
+function reanudarSimulacion() {
+    iniciarSimulacion();
+}
+
+
+
+
+
+
+
+window.addEventListener("keydown", manejaTeclado, false);
+var teclas = [];
+function manejaTeclado(e) {
+    teclas[e.code] = true;
+    // Ctrl + Shift + 5
+    if (teclas[‘ControlLeft’] && teclas[‘ShifLeft’] && teclas[‘Digit5’]) {
+        console.log("Pulsado Ctrl + Shift + 5");
+    }
+    // Ctrl + f
+    if (teclas[‘ControlLeft’] && teclas[‘KeyF’]) {
+        console.log("Pulsado Ctrl + f");
+        // cancelar acción por omisión del navegador
+        e.preventDefault();
+    }
+}
+
+
+//-------------------BOTONES--------------------
