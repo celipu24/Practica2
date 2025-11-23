@@ -12,6 +12,14 @@ let mundo = new Mundo(N);
 //cuanto ocupa cada celula=celda
 let tamanoCelda = canvas.width / N;
 
+
+//--------------------INICIALIZACIÓN--------------------
+//CREAMOS EL TABLERO INICIAL
+mundo.crearTablero();
+//DIBUJAMOS EL MUNDO INICIAL
+mundo.dibujar(contexto, tamanoCelda);
+console.log("Juego de la Vida cargado correctamente.");
+
 let temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
 
@@ -115,11 +123,29 @@ teclas[e.code] = false;
 
 //-------------------EVENTOS BOTONES--------------------
 //añadimos los eventos de botón
-document.getElementById("Iniciar").onclick = () => iniciarSimulacion();
-document.getElementById("Detener").onclick = () => detenerSimulacion();
-document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
+document.getElementById("Iniciar").onclick = () =>{
+    if (btnIniciar.disabled) return;
+    //como anteriormente, comprobamos si hay células vivas, para empezar a correr el juego
+    //y actualizamos el estado de los botones
+    //por último iniciamos la simulación
+    if (contarCelulasVivas() === 0) {
+        alert("No hay ninguna célula viva. Pinta alguna célula antes de iniciar.");
+        actualizarEstadoBotones();
+        return;
+    }
+    iniciarSimulacion();
+    actualizarEstadoBotones();
+};
 
+document.getElementById("Detener").onclick = () => { detenerSimulacion(); actualizarEstadoBotones(); }
+document.getElementById("Reanudar").onclick = () => { reanudarSimulacion(); actualizarEstadoBotones(); }
 
+function actualizarEstadoBotones() {
+    const hayVivas = contarCelulasVivas() > 0;
+    btnIniciar.disabled = !hayVivas || simulando;
+    btnDetener.disabled = !simulando;
+    btnReanudar.disabled = simulando || !hayVivas;
+}
 
 //-------------------EVENTOS RATÓN--------------------
 
@@ -138,12 +164,7 @@ canvas.addEventListener("click", function(e) {
     cel.setEstado(true);
 
     mundo.dibujar(contexto, tamanoCelda);
+    actualizarEstadoBotones();
 });
-//DIBUJAMOS EL MUNDO INICIAL
 
 
-
-
-
-mundo.dibujar(contexto, tamanoCelda);
-console.log("Juego de la Vida cargado correctamente.");

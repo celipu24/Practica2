@@ -52,7 +52,7 @@ class Mundo{
 
     //Actualizamos el estado del tablero
     actualizarTablero(){
-        for(let fila = 0; fila < this.ancho; fila++){
+        for(let fila = 0; fila < this.alto; fila++){
             for(let columna = 0; columna < this.ancho; columna++){
                 //recorremos las "casillas" del tablero para actualizar el estado de las celulas
                 const celula = this.getCelula(fila, columna);
@@ -61,7 +61,7 @@ class Mundo{
                 celula.calcularSiguienteEstado(vecinasVivas);
             }
         }
-        for (let fila = 0; fila < this.ancho; fila++){
+        for (let fila = 0; fila < this.alto; fila++){
             for (let columna = 0; columna < this.ancho; columna++){
                 /*separamos la actualización en 2 partes para que primero se actualice el estado siguiente
                 y aquí se actualice en tiempo real.*/
@@ -71,7 +71,7 @@ class Mundo{
     }
 
     dibujar(ctx, tamCelda) {
-        for (let fila = 0; fila < this.ancho; fila++) {
+        for (let fila = 0; fila < this.alto; fila++) {
             for (let col = 0; col < this.ancho; col++) {
                 const celula = this.getCelula(fila, col);
                 ctx.fillStyle = celula.estado ? "black" : "white";
