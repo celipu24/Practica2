@@ -138,6 +138,24 @@ canvas.addEventListener("click", function(e) {
     mundo.dibujar(contexto, tamanoCelda);
 });
 
+
+// Método para mostrar información de una célula al pasar el mouse sobre ella
+const cellInfoPanel = document.getElementById('cellInfoPanel');
+canvas.addEventListener("mousemove", function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const col = Math.floor(x / tamanoCelda);
+    const fila = Math.floor(y / tamanoCelda);
+
+    const cel = mundo.getCelula(fila, col);
+    if (cel) {
+        cellInfoPanel.innerHTML = `Célula (${fila}, ${col}) - Viva: ${cel.estado ? 'Sí' : 'No'} - Tiempo viva: ${cel.time}`;
+    }
+});
+
+
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda);
 console.log("Juego de la Vida cargado correctamente.");
