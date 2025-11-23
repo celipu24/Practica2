@@ -70,11 +70,12 @@ function iniciarSimulacion() {
     }
 
     simulando = true;
-    temporizador = setInterval(pasoSimulacion, 100 / velocidad); // velocidad = pasos/segundo
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
 }
 
 
 function detenerSimulacion() {
+    if (!simulando) return; // ya está detenido
     simulando = false;
     clearInterval(temporizador);
     temporizador = null;
