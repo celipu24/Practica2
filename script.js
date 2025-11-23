@@ -156,6 +156,25 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 //-------------------EVENTOS RATÓN--------------------
 
+function mostrarInfoCelula(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const col = Math.floor(x / tamanoCelda);
+    const fila = Math.floor(y / tamanoCelda);
+
+    const cel = mundo.getCelula(fila, col);
+
+    const cellInfoPanel = document.getElementById('cellInfoPanel');
+    if (!cellInfoPanel) return; // si no existe el panel, salimos
+
+    cellInfoPanel.innerHTML = `Célula en posición (${fila}, ${col}) - ` +
+                              `Viva: ${cel.estado ? 'Sí' : 'No'} - ` +
+                              `Tiempo viva: ${cel.time}`;
+}
+canvas.addEventListener('mousemove', mostrarInfoCelula);
+
 canvas.addEventListener("click", function(e) {
     if (simulando) return;
 
@@ -172,10 +191,9 @@ canvas.addEventListener("click", function(e) {
 
     mundo.dibujar(contexto, tamanoCelda);
 });
+
+
 //DIBUJAMOS EL MUNDO INICIAL
-
-
-
 
 
 mundo.dibujar(contexto, tamanoCelda);
