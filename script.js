@@ -62,8 +62,6 @@ function poblarAleatorio(prob = 0.05) {
 
 
 function iniciarSimulacion() {
-    if (simulando) return;                     // ya está corriendo
-
     // Si no hay ninguna célula viva, inicializamos con aleatorio
     if (mundo.contarCelulasVivas() === 0) {
         console.log("No hay células vivas. No se puede iniciar la simulación.");
@@ -72,7 +70,7 @@ function iniciarSimulacion() {
     }
 
     simulando = true;
-    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
+    temporizador = setInterval(pasoSimulacion, 100 / velocidad); // velocidad = pasos/segundo
 }
 
 
