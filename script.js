@@ -121,7 +121,6 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 //-------------------EVENTOS RATÓN--------------------
 canvas.addEventListener("click", function(e) {
-    if (simulando) return;
 
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -133,6 +132,10 @@ canvas.addEventListener("click", function(e) {
 
     const cel = mundo.getCelula(fila, col);
     cel.setEstado(true);
+
+    if (simulando && typeof cel.nextEstado !== "undefined") {
+        cel.nextEstado = true;
+    }
 
     mundo.dibujar(contexto, tamanoCelda);
 });
