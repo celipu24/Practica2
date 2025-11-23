@@ -50,6 +50,20 @@ class Mundo{
         return vivas;
     }
 
+
+    // Calcular nextEstado de todas las células
+    calcularSiguienteGeneracion() {
+        for (let fila = 0; fila < this.alto; fila++) {
+            for (let col = 0; col < this.ancho; col++) {
+                const celula = this.getCelula(fila, col);
+                const vecinos = this.contarVecinasVivas(fila, col);
+                celula.calcularSiguienteEstado(vecinos);
+            }
+        }
+    }
+
+
+
     //Actualizamos el estado del tablero
     actualizarTablero(){
         for(let fila = 0; fila < this.alto; fila++){
@@ -82,6 +96,30 @@ class Mundo{
         }
     }
 
+    // Cuenta cuántas células vivas hay en el mundo
+    contarCelulasVivas() {
+        let cont = 0;
+        for (let f = 0; f < mundo.ancho; f++) {
+            for (let c = 0; c < mundo.ancho; c++) {
+                if (mundo.getCelula(f, c).estado) cont++;
+            }
+        }
+        return cont;
+    }
+
+    // Crea células aleatorias SOLO si el mundo está vacío
+    poblarAleatorio(prob = 0.05) {
+        // limpias completamente (creaTablero reinicia celulas y tiempos)
+        mundo.crearTablero();
+        for (let f = 0; f < mundo.ancho; f++) {
+            for (let c = 0; c < mundo.ancho; c++) {
+                const viva = Math.random() < prob;
+                mundo.getCelula(f, c).setEstado(viva);
+            }
+        }
+        // dibujamos el resultado inicial
+        mundo.dibujar(contexto, tamanoCelda);
+    }
 
 
 }

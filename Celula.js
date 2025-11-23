@@ -6,11 +6,11 @@ class Celula{
 
     }
 
-    setEstado(estado){
-        if(this.estado !== estado){
+    setEstado(viva){
+        if(this.estado !== viva){
             this.time = 0; // reiniciar el tiempo si cambia de estado
         }
-        this.estado = estado;
+        this.estado = viva;
     }
 
     calcularSiguienteEstado(vecinasVivas){ //aplicamos la logica de la supervivencia de las reglas
@@ -30,9 +30,5 @@ class Celula{
             this.time += 1; // si esta viva aumenta el tiempo que ha estado viva
         }
     }
-
-
-
-
 
 }
