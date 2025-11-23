@@ -67,7 +67,7 @@ function iniciarSimulacion() {
     // Si no hay ninguna célula viva, inicializamos con aleatorio
     if (mundo.contarCelulasVivas() === 0) {
         console.log("No hay células vivas. No se puede iniciar la simulación.");
-        actualizarEstadoBotones
+        actualizarEstadoBotones();
         return;
     }
 
@@ -87,40 +87,6 @@ function reanudarSimulacion() {
     iniciarSimulacion();
 }
 
-
-//-------------------EVENTOS BOTONES--------------------
-//añadimos los eventos de botón
-btnIniciar.onclick = iniciarSimulacion;
-btnDetener.onclick = detenerSimulacion;
-btnReanudar.onclick = reanudarSimulacion;
-
-
-
-//-------------------EVENTOS RATÓN--------------------
-
-canvas.addEventListener("click", function(e) {
-    if (simulando) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    tamanoCelda = canvas.width / N;
-    const col = Math.floor(x / tamanoCelda);
-    const fila = Math.floor(y / tamanoCelda);
-
-    const cel = mundo.getCelula(fila, col);
-    cel.setEstado(true);
-
-    mundo.dibujar(contexto, tamanoCelda);
-    actualizarEstadoBotones();
-});
-
-//para que si no hay ninguna celula viva, se creen aleatoriamente
-document.getElementById("Aleatorio")?.onclick = () => {
-    mundo.poblarAleatorio(0.2); // 20% de células vivas por defecto
-    actualizarEstadoBotones();
-};
 
 
 //-------------------EVENTOS TECLADO--------------------
@@ -155,26 +121,6 @@ document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 
 //-------------------EVENTOS RATÓN--------------------
-
-function mostrarInfoCelula(event) {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const col = Math.floor(x / tamanoCelda);
-    const fila = Math.floor(y / tamanoCelda);
-
-    const cel = mundo.getCelula(fila, col);
-
-    const cellInfoPanel = document.getElementById('cellInfoPanel');
-    if (!cellInfoPanel) return; // si no existe el panel, salimos
-
-    cellInfoPanel.innerHTML = `Célula en posición (${fila}, ${col}) - ` +
-                              `Viva: ${cel.estado ? 'Sí' : 'No'} - ` +
-                              `Tiempo viva: ${cel.time}`;
-}
-canvas.addEventListener('mousemove', mostrarInfoCelula);
-
 canvas.addEventListener("click", function(e) {
     if (simulando) return;
 
@@ -192,10 +138,7 @@ canvas.addEventListener("click", function(e) {
     mundo.dibujar(contexto, tamanoCelda);
 });
 
-
 //DIBUJAMOS EL MUNDO INICIAL
-
-
 mundo.dibujar(contexto, tamanoCelda);
 console.log("Juego de la Vida cargado correctamente.");
 
