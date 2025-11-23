@@ -1,72 +1,85 @@
+var canvas = document.getElementById("lienzo");
+var contexto = canvas.getContext("2d");
+
 //VARIABLES GLOBALES
-
-//Accedemos al motor gráfico ("contexto")
-const canvas = document.getElementById("lienzo");
-const contexto = canvas.getContext("2d");
-
 //N es el tamaño del mundo
-const N = 40;
+let N = 40;
 //velocidad a la que se actualiza el mundo (en sg)                
 let velocidad = 10;  
+//CREAMOS EL PROPIO MUNDO      
+let mundo = new Mundo(N);  
 //cuanto ocupa cada celula=celda
 let tamanoCelda = canvas.width / N;
 
-//CREAMOS EL PROPIO MUNDO      
-let mundo = new Mundo(N, N); 
-
-var temporizador=null;       //para controlar la simulación
+let temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
 
-//--------------------INICIALIZACIÓN--------------------
-//CREAMOS EL TABLERO INICIAL
-mundo.crearTablero();
-//DIBUJAMOS EL MUNDO INICIAL
+//EMPIEZO A PINTAR CÉLULAS
+let click = false;
+let dibujarEstado = true; // true para dibujar vivas, false para muertas
+
+//PARA DIBUJAR EL MUNDO
+//clearRect(x,y,alto,ancho) borra una zona rectangular.
+contexto.clearRect(0, 0, canvas.width, canvas.height);
 mundo.dibujar(contexto, tamanoCelda);
-console.log("Juego de la Vida cargado correctamente.");
 
+//JUEGO
 
-
-//-------------------BOTONES--------------------
-const btnIniciar = document.getElementById("Iniciar");
-const btnDetener = document.getElementById("Detener");
-const btnReanudar = document.getElementById("Reanudar");
-
-function actualizarEstadoBotones() {
-    const hayVivas = mundo.contarCelulasVivas() > 0;
-    btnIniciar.disabled = !hayVivas || simulando;
-    btnDetener.disabled = !simulando;
-    btnReanudar.disabled = simulando || !hayVivas;
-}
-
-
-//-------------------SIMULACIÓN--------------------
 // Realiza un paso de la simulación
 function pasoSimulacion() {
     mundo.actualizarTablero(); //calcula la siguiente generación
     mundo.dibujar(contexto, tamanoCelda); //dibuja el mundo actualizado
 }
 
-
 //iniciar simulación
+// Cuenta cuántas células vivas hay en el mundo
+function contarCelulasVivas() {
+    let cont = 0;
+    for (let f = 0; f < mundo.ancho; f++) {
+        for (let c = 0; c < mundo.ancho; c++) {
+            if (mundo.getCelula(f, c).estado) cont++;
+        }
+    }
+    return cont;
+}
+
+// Crea células aleatorias SOLO si el mundo está vacío
+function poblarAleatorio(prob = 0.05) {
+    // limpias completamente (creaTablero reinicia celulas y tiempos)
+    mundo.crearTablero();
+
+    for (let f = 0; f < mundo.ancho; f++) {
+        for (let c = 0; c < mundo.ancho; c++) {
+            const viva = Math.random() < prob;
+            mundo.getCelula(f, c).setEstado(viva);
+        }
+    }
+    // dibujamos el resultado inicial
+    mundo.dibujar(contexto, tamanoCelda);
+}
+
+
+
+
 function iniciarSimulacion() {
     if (simulando) return;                     // ya está corriendo
 
     // Si no hay ninguna célula viva, inicializamos con aleatorio
     if (mundo.contarCelulasVivas() === 0) {
         console.log("No hay células vivas. No se puede iniciar la simulación.");
-        actualizarEstadoBotones();
+        actualizarEstadoBotones
         return;
     }
+
     simulando = true;
-    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/milisegundo
-    actualizarEstadoBotones();
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
 }
+
 
 function detenerSimulacion() {
     simulando = false;
     clearInterval(temporizador);
     temporizador = null;
-    actualizarEstadoBotones();
 }
 
 function reanudarSimulacion() {
@@ -77,29 +90,11 @@ function reanudarSimulacion() {
 
 //-------------------EVENTOS BOTONES--------------------
 //añadimos los eventos de botón
-document.getElementById("Iniciar").onclick = () =>{
-    if (btnIniciar.disabled) return;
-    //como anteriormente, comprobamos si hay células vivas, para empezar a correr el juego
-    //y actualizamos el estado de los botones
-    //por último iniciamos la simulación
-    if (contarCelulasVivas() === 0) {
-        alert("No hay ninguna célula viva. Pinta alguna célula antes de iniciar.");
-        actualizarEstadoBotones();
-        return;
-    }
-    iniciarSimulacion();
-    actualizarEstadoBotones();
-};
+btnIniciar.onclick = iniciarSimulacion;
+btnDetener.onclick = detenerSimulacion;
+btnReanudar.onclick = reanudarSimulacion;
 
-document.getElementById("Detener").onclick = () => { detenerSimulacion(); actualizarEstadoBotones(); }
-document.getElementById("Reanudar").onclick = () => { reanudarSimulacion(); actualizarEstadoBotones(); }
 
-function actualizarEstadoBotones() {
-    const hayVivas = contarCelulasVivas() > 0;
-    btnIniciar.disabled = !hayVivas || simulando;
-    btnDetener.disabled = !simulando;
-    btnReanudar.disabled = simulando || !hayVivas;
-}
 
 //-------------------EVENTOS RATÓN--------------------
 
@@ -151,11 +146,40 @@ function limpiaTeclado(e) {
 teclas[e.code] = false;
 }
 
+//-------------------EVENTOS BOTONES--------------------
+//añadimos los eventos de botón
+document.getElementById("Iniciar").onclick = () => iniciarSimulacion();
+document.getElementById("Detener").onclick = () => detenerSimulacion();
+document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
 
 
-//INICIALIZACION
-actualizarEstadoBotones();
 
+//-------------------EVENTOS RATÓN--------------------
+
+canvas.addEventListener("click", function(e) {
+    if (simulando) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    tamanoCelda = canvas.width / N;
+    const col = Math.floor(x / tamanoCelda);
+    const fila = Math.floor(y / tamanoCelda);
+
+    const cel = mundo.getCelula(fila, col);
+    cel.setEstado(true);
+
+    mundo.dibujar(contexto, tamanoCelda);
+});
+//DIBUJAMOS EL MUNDO INICIAL
+
+
+
+
+
+mundo.dibujar(contexto, tamanoCelda);
+console.log("Juego de la Vida cargado correctamente.");
 
 
 
