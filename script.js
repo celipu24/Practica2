@@ -67,14 +67,14 @@ function iniciarSimulacion() {
 
     // Si no hay ninguna célula viva, inicializamos con aleatorio
     if (contarCelulasVivas() === 0) {
-        // Puedes cambiar la probabilidad aquí (ej: 0.15 = 15% de celdas vivas)
-        poblarAleatorio(0.05);
-        mundo.dibujar(contexto, tamanoCelda);
+        console.log("No hay células vivas. No se puede iniciar la simulación.");
+        return;
     }
 
     simulando = true;
-    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/milisegundo
 }
+
 
 
 function detenerSimulacion() {
