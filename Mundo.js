@@ -105,7 +105,7 @@ class Mundo{
         let cont = 0;
         for (let f = 0; f < mundo.ancho; f++) {
             for (let c = 0; c < mundo.ancho; c++) {
-                if (mundo.getCelula(f, c).estado) cont++;
+                if (this.getCelula(f, c).estado) cont++;
             }
         }
         return cont;
@@ -118,7 +118,7 @@ class Mundo{
         for (let f = 0; f < mundo.ancho; f++) {
             for (let c = 0; c < mundo.ancho; c++) {
                 const viva = Math.random() < prob;
-                mundo.getCelula(f, c).setEstado(viva);
+                this.getCelula(f, c).setEstado(viva);
             }
         }
         // dibujamos el resultado inicial
