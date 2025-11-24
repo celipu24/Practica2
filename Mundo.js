@@ -10,13 +10,19 @@ class Mundo{
     /*Este método crea una matriz de tamaño ancho x ancho inicializada con null
     y se van rellenando las casillas con un bucle que recorre las filas y columnas */
     crearTablero(){
-        this.tablero = new Array(this.ancho);
-        for(let fila=0; fila < this.alto; fila++){
-            this.tablero[fila] = new Array(this.ancho);
-            for(let columna=0; columna < this.ancho; columna++){
-                this.tablero[fila][columna] = new Celula;
+        const nuevoTablero = new Array(this.alto);
+        for (let fila = 0; fila < this.alto; fila++) {
+            nuevoTablero[fila] = new Array(this.ancho);
+            for (let columna = 0; columna < this.ancho; columna++) {
+                // Si ya existía una celula en la posición, mantenla
+                if (this.tablero[fila] && this.tablero[fila][columna]) {
+                    nuevoTablero[fila][columna] = this.tablero[fila][columna];
+                } else {
+                    nuevoTablero[fila][columna] = new Celula();
+                }
             }
         }
+        this.tablero = nuevoTablero;
     }
 
     /*esto implica que el mundo se comporte como una esfera, evita índices

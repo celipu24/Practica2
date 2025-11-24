@@ -203,17 +203,16 @@ btnCambiarN.addEventListener("click", () => {
     //añadimos un maximo y un minimo para que visualmente no se recorte y sea visible el mundo     
     if (nuevoN < N_MIN) nuevoN = N_MIN;   
     if (nuevoN > N_MAX) nuevoN = N_MAX; 
+    
+    mundo.ancho = nuevoN;
+    mundo.alto = nuevoN;
     N = nuevoN;
 
-    tamanoCelda = 15;   
-    canvas.width = N * tamanoCelda;
-    canvas.height = N * tamanoCelda;
-        recalcularOffset();
+    mundo.crearTablero(); // esto añadirá nuevas celdas sin perder las viejas
 
-    mundo = new Mundo(N);             
+    recalcularOffset();
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
-    recalcularOffset();
 
 });
 
