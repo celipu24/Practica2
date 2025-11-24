@@ -208,12 +208,14 @@ btnCambiarN.addEventListener("click", () => {
     tamanoCelda = 15;   
     canvas.width = N * tamanoCelda;
     canvas.height = N * tamanoCelda;
-        recalcularOffset();
 
-    mundo = new Mundo(N);             
+    mundo.ancho = N;
+    mundo.alto = N;
+    mundo.crearTablero(); // Mantiene las celdas viejas y añade las nuevas
+
+    recalcularOffset();
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
-    recalcularOffset();
 
 });
 
