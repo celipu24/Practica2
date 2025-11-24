@@ -26,6 +26,40 @@ let tamanoCelda = canvasSize / N;
 let offsetX = (canvas.width - tamanoCelda * N) / 2;
 let offsetY = (canvas.height - tamanoCelda * N) / 2;
 
+// ------------------- DIBUJO DE LA CUADRÍCULA --------------------
+function dibujarCuadricula() {
+    // color rosa sutil para las líneas de la cuadricula
+    contexto.save();
+    contexto.strokeStyle = 'rgba(244,114,182,0.12)'; // rosa suave
+    contexto.lineWidth = 1;
+
+    // rectángulo del tablero (área usada por las N celdas)
+    const startX = offsetX;
+    const startY = offsetY;
+    const boardSize = tamanoCelda * N;
+
+    // dibujar verticales
+    for (let i = 0; i <= N; i++) {
+        const x = Math.round(startX + i * tamanoCelda) + 0.5; // +0.5 para líneas nítidas
+        contexto.beginPath();
+        contexto.moveTo(x, startY);
+        contexto.lineTo(x, startY + boardSize);
+        contexto.stroke();
+    }
+
+    // dibujar horizontales
+    for (let j = 0; j <= N; j++) {
+        const y = Math.round(startY + j * tamanoCelda) + 0.5;
+        contexto.beginPath();
+        contexto.moveTo(startX, y);
+        contexto.lineTo(startX + boardSize, y);
+        contexto.stroke();
+    }
+
+    contexto.restore();
+}
+
+
 //CREAMOS EL PROPIO MUNDO      
 let mundo = new Mundo(N); 
 
@@ -45,7 +79,7 @@ let dibujarEstado = true; // true para dibujar vivas, false para muertas
 //clearRect(x,y,alto,ancho) borra una zona rectangular.
 contexto.clearRect(0, 0, canvas.width, canvas.height);
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
-
+dibujarCuadricula();
 
 
 //JUEGO
@@ -53,7 +87,8 @@ mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 // Realiza un paso de la simulación
 function pasoSimulacion() {
     mundo.actualizarTablero(); //calcula la siguiente generación
-    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY); //dibuja el mundo actualizado
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+    dibujarCuadricula();
     paso++;
     pasoPanel.textContent = "Simulación en marcha: Paso " + paso;
 }
@@ -83,6 +118,8 @@ function poblarAleatorio(prob = 0.05) {
     }
     // dibujamos el resultado inicial
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+    dibujarCuadricula();
+
 }
 
 
@@ -152,7 +189,9 @@ function ponerPatron(patron, fila, col) {
         cel.setEstado(true);
     }
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
-}
+    dibujarCuadricula();
+
+    }
 
 /*éste método sirve para que al cambiar la N se recalcule el tamaño de las celdas
 y por ende calcule de nuevo el tamaño del tablero*/
@@ -170,6 +209,8 @@ btnCambiarN.addEventListener("click", () => {
     offsetY = (canvas.height - tamanoCelda * N) / 2;
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+    dibujarCuadricula();
+
 });
 
 
@@ -255,6 +296,8 @@ canvas.addEventListener("click", function(e) {
             cel.nextEstado = true;
         }
         mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+        dibujarCuadricula();
+
     }
 });
 
@@ -280,6 +323,8 @@ canvas.addEventListener("mousemove", function(e) {
 
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+dibujarCuadricula();
+
 console.log("Juego de la Vida cargado correctamente.");
 
 
