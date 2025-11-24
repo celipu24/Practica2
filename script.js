@@ -119,6 +119,19 @@ function reanudarSimulacion() {
     temporizador = setInterval(pasoSimulacion, 1000 / velocidad);
 }
 
+/*Definimos los patrones(figuras) para que luego al llamar su identificador usemos esta función
+y solo tengamos que declarar en que coordenadas se colocan las vecinas*/
+let patronSeleccionado = null;
+function ponerPatron(patron, fila, col) {
+    for (let [df, dc] of patron) {
+        let f = fila + df;
+        let c = col + dc;
+        let cel = mundo.getCelula(f, c);
+        cel.setEstado(true);
+    }
+    mundo.dibujar(contexto, tamanoCelda);
+}
+
 //-------------------EVENTOS TECLADO--------------------
 //detección de varias teclas a la vez
 let teclas = [];
@@ -159,21 +172,24 @@ const btnPlaneador = document.getElementById("btnPlaneador");
 if (btnParpadeador) {
     btnParpadeador.addEventListener('click', function() {
         ponerPatron([[-1,0],[0,0],[1,0]], 10, 10); // Parpadeador en (10,10)
+        console.log("Parpadeador seleccionado. Haz clic en el tablero para colocarlo.");
     }); 
 }
 if (btnBarco) {
     btnBarco.addEventListener('click', function() {
         ponerPatron([[0,0],[0,1],[1,0],[1,2],[2,1]], 15, 15); // Barco en (15,15)
+        console.log("Barco seleccionado. Haz clic en el tablero para colocarlo.");
+
     }); 
 }
 if (btnPlaneador) {
     btnPlaneador.addEventListener('click', function() {
         ponerPatron([[0,1],[1,2],[2,0],[2,1],[2,2]], 20, 20); // Planeador en (20,20)
+        console.log("Planeador seleccionado. Haz clic en el tablero para colocarlo.");
     });
 }
 //-------------------EVENTOS RATÓN--------------------
 canvas.addEventListener("click", function(e) {
-
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -182,14 +198,17 @@ canvas.addEventListener("click", function(e) {
     const col = Math.floor(x / tamanoCelda);
     const fila = Math.floor(y / tamanoCelda);
 
-    const cel = mundo.getCelula(fila, col);
-    cel.setEstado(true);
-
-    if (simulando && typeof cel.nextEstado !== "undefined") {
-        cel.nextEstado = true;
+    if (patronSeleccionado) {
+        ponerPatron(patronSeleccionado, fila, col);
+        patronSeleccionado = null; // resetear patrón después de colocar
+    }else {
+        const cel = mundo.getCelula(fila, col);
+        cel.setEstado(true);
+        if (simulando && typeof cel.nextEstado !== "undefined") {
+            cel.nextEstado = true;
+        }
+        mundo.dibujar(contexto, tamanoCelda);
     }
-
-    mundo.dibujar(contexto, tamanoCelda);
 });
 
 
@@ -209,16 +228,6 @@ canvas.addEventListener("mousemove", function(e) {
     }
 });
 
-//-------------------PATRONES PREDEFINIDOS--------------------
-function ponerPatron(patron, fila, col) {
-    for (let [df, dc] of patron) {
-        let f = fila + df;
-        let c = col + dc;
-        let cel = mundo.getCelula(f, c);
-        cel.setEstado(true);
-    }
-    mundo.dibujar(contexto, tamanoCelda);
-}
 
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda);
