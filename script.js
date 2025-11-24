@@ -2,6 +2,10 @@ var canvas = document.getElementById("lienzo");
 var contexto = canvas.getContext("2d");
 let paso=0;
 const pasoPanel = document.getElementById("pasoPanel");
+//constantes para el cambio del tamaño de mundo
+const inputN = document.getElementById("inputN");
+const btnCambiarN = document.getElementById("btnCambiarN");
+
 
 //VARIABLES GLOBALES
 //N es el tamaño del mundo
@@ -131,6 +135,19 @@ function ponerPatron(patron, fila, col) {
     }
     mundo.dibujar(contexto, tamanoCelda);
 }
+
+/*éste método sirve para que al cambiar la N se recalcule el tamaño de las celdas
+y por ende calcule de nuevo el tamaño del tablero*/
+btnCambiarN.addEventListener("click", () => {
+    //parseInt (función predefinida de js) hace que un String se convierta en int 
+    //.value te devuelve el valor de input
+    N = parseInt(inputN.value);       
+    tamanoCelda = canvas.width / N;   
+    mundo = new Mundo(N);             
+    mundo.dibujar(contexto, tamanoCelda);
+});
+
+
 
 //-------------------EVENTOS TECLADO--------------------
 //detección de varias teclas a la vez
