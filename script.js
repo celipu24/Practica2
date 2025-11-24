@@ -141,7 +141,12 @@ y por ende calcule de nuevo el tamaño del tablero*/
 btnCambiarN.addEventListener("click", () => {
     //parseInt (función predefinida de js) hace que un String se convierta en int 
     //.value te devuelve el valor de input
-    N = parseInt(inputN.value);       
+    let nuevoN = parseInt(inputN.value);  
+    //añadimos un maximo y un minimo para que visualmente no se recorte y sea visible el mundo     
+    if (nuevoN < 5) nuevoN = 5;   
+    if (nuevoN > 100) nuevoN = 100; 
+    N = nuevoN;
+
     tamanoCelda = canvas.width / N;   
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda);
