@@ -191,7 +191,7 @@ function ponerPatron(patron, fila, col) {
     }
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
-
+    recalcularOffset();
     }
 
 /*éste método sirve para que al cambiar la N se recalcule el tamaño de las celdas
@@ -213,6 +213,7 @@ btnCambiarN.addEventListener("click", () => {
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
+    recalcularOffset();
 
 });
 
@@ -307,6 +308,7 @@ canvas.addEventListener("click", function(e) {
     mundo.getCelula(fila, col).setEstado(true);
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
+    recalcularOffset();
     });
 
 
@@ -332,6 +334,7 @@ canvas.addEventListener("mousemove", function(e) {
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 dibujarCuadricula();
+recalcularOffset();
 
 console.log("Juego de la Vida cargado correctamente.");
 
