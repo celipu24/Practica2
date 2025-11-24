@@ -1,5 +1,7 @@
 var canvas = document.getElementById("lienzo");
 var contexto = canvas.getContext("2d");
+let paso=0;
+const pasoPanel = document.getElementById("pasoPanel");
 
 //VARIABLES GLOBALES
 //N es el tamaño del mundo
@@ -29,6 +31,8 @@ mundo.dibujar(contexto, tamanoCelda);
 function pasoSimulacion() {
     mundo.actualizarTablero(); //calcula la siguiente generación
     mundo.dibujar(contexto, tamanoCelda); //dibuja el mundo actualizado
+    paso++;
+    pasoPanel.textContent = "Simulación en marcha: Paso " + paso;
 }
 
 //iniciar simulación
@@ -80,7 +84,12 @@ function iniciarSimulacion() {
         actualizarEstadoBotones();
         return;
     }
+    if(reiniciarPasos){
+        paso = 0; // reinicia el contador de pasos
+        pasoPanel.textContent = "Simulación en marcha: Paso 0";
 
+    }
+    
     simulando = true;
     // actualizar botones inmediatamente
     actualizarEstadoBotones();
@@ -106,7 +115,7 @@ function detenerSimulacion() {
 
 function reanudarSimulacion() {
     if (simulando) return;
-    iniciarSimulacion();
+    iniciarSimulacion(false); // no reinicia el contador de pasos
 }
 
 //-------------------EVENTOS TECLADO--------------------
