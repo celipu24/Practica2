@@ -171,20 +171,20 @@ const btnBarco = document.getElementById("btnBarco");
 const btnPlaneador = document.getElementById("btnPlaneador");
 if (btnParpadeador) {
     btnParpadeador.addEventListener('click', function() {
-        ponerPatron([[-1,0],[0,0],[1,0]], 10, 10); // Parpadeador en (10,10)
+        patronSeleccionado = ([[-1,0],[0,0],[1,0]], 10, 10); // Parpadeador en (10,10)
         console.log("Parpadeador seleccionado. Haz clic en el tablero para colocarlo.");
     }); 
 }
 if (btnBarco) {
     btnBarco.addEventListener('click', function() {
-        ponerPatron([[0,0],[0,1],[1,0],[1,2],[2,1]], 15, 15); // Barco en (15,15)
+        patronSeleccionado = ([[0,0],[0,1],[1,0],[1,2],[2,1]], 15, 15); // Barco en (15,15)
         console.log("Barco seleccionado. Haz clic en el tablero para colocarlo.");
 
     }); 
 }
 if (btnPlaneador) {
     btnPlaneador.addEventListener('click', function() {
-        ponerPatron([[0,1],[1,2],[2,0],[2,1],[2,2]], 20, 20); // Planeador en (20,20)
+        patronSeleccionado = ([[0,1],[1,2],[2,0],[2,1],[2,2]], 20, 20); // Planeador en (20,20)
         console.log("Planeador seleccionado. Haz clic en el tablero para colocarlo.");
     });
 }
