@@ -333,6 +333,27 @@ canvas.addEventListener("mousemove", function(e) {
 });
 
 
+//------------MÚSICA OPCIONAL-----------------
+const musica = document.getElementById("musicaFondo");
+const btnMusica = document.getElementById("btnMusica");
+let musicaOn = false;
+
+btnMusica.addEventListener("click", () => {
+    if (!musicaOn) {
+        musica.volume = 0.4;
+        musica.play();
+        musicaOn = true;
+        btnMusica.textContent = "🔇 Silenciar";
+    } else {
+        musica.pause();
+        musicaOn = false;
+        btnMusica.textContent = "🎵 Música";
+    }
+});
+
+
+
+
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 dibujarCuadricula();
