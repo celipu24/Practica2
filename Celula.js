@@ -30,5 +30,4 @@ class Celula{
             this.time += 1; // si esta viva aumenta el tiempo que ha estado viva
         }
     }
-
 }

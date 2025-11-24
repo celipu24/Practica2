@@ -84,14 +84,18 @@ class Mundo{
         }
     }
 
-    dibujar(ctx, tamCelda) {
+    dibujar(ctx, tamCelda, offsetX = 0, offsetY = 0) {
         for (let fila = 0; fila < this.alto; fila++) {
             for (let col = 0; col < this.ancho; col++) {
                 const celula = this.getCelula(fila, col);
+                const x = offsetX + col * tamCelda;
+                const y = offsetY + fila * tamCelda;
+
                 ctx.fillStyle = celula.estado ? "black" : "white";
-                ctx.fillRect(col * tamCelda, fila * tamCelda, tamCelda, tamCelda);
+                ctx.fillRect(x, y, tamCelda, tamCelda);
+
                 ctx.strokeStyle = "#ccc";
-                ctx.strokeRect(col * tamCelda, fila * tamCelda, tamCelda, tamCelda);
+                ctx.strokeRect(x, y, tamCelda, tamCelda);
             }
         }
     }
