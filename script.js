@@ -171,20 +171,23 @@ const btnBarco = document.getElementById("btnBarco");
 const btnPlaneador = document.getElementById("btnPlaneador");
 if (btnParpadeador) {
     btnParpadeador.addEventListener('click', function() {
-        patronSeleccionado = ([[-1,0],[0,0],[1,0]], 10, 10); // Parpadeador en (10,10)
+        //posiciones que hacen el parpadeador
+        patronSeleccionado = [[-1,0],[0,0],[1,0]]; 
         console.log("Parpadeador seleccionado. Haz clic en el tablero para colocarlo.");
     }); 
 }
 if (btnBarco) {
     btnBarco.addEventListener('click', function() {
-        patronSeleccionado = ([[0,0],[0,1],[1,0],[1,2],[2,1]], 15, 15); // Barco en (15,15)
+        //posiciones que hacen el barco
+        patronSeleccionado = [[0,0],[0,1],[1,0],[1,2],[2,1]]; 
         console.log("Barco seleccionado. Haz clic en el tablero para colocarlo.");
 
     }); 
 }
 if (btnPlaneador) {
     btnPlaneador.addEventListener('click', function() {
-        patronSeleccionado = ([[0,1],[1,2],[2,0],[2,1],[2,2]], 20, 20); // Planeador en (20,20)
+        //posiciones que hacen el planeador
+        patronSeleccionado = [[0,1],[1,2],[2,0],[2,1],[2,2]]; 
         console.log("Planeador seleccionado. Haz clic en el tablero para colocarlo.");
     });
 }
@@ -200,7 +203,8 @@ canvas.addEventListener("click", function(e) {
 
     if (patronSeleccionado) {
         ponerPatron(patronSeleccionado, fila, col);
-        patronSeleccionado = null; // resetear patrón después de colocar
+        //el patrón se resetea después de colocar alguna de las figuras
+        patronSeleccionado = null; 
     }else {
         const cel = mundo.getCelula(fila, col);
         cel.setEstado(true);
