@@ -13,7 +13,7 @@ let mundo = new Mundo(N);
 //cuanto ocupa cada celula=celda
 let tamanoCelda = canvas.width / N;
 
-let temporizador;       //para controlar la simulación
+var temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
 
 //EMPIEZO A PINTAR CÉLULAS
@@ -165,7 +165,8 @@ if (btnIniciar) btnIniciar.addEventListener('click', iniciarSimulacion);
 if (btnDetener) btnDetener.addEventListener('click', detenerSimulacion);
 if (btnReanudar) btnReanudar.addEventListener('click', reanudarSimulacion);
 
-actualizarEstadoBotones(); //inicializa el estado de los botones
+//inicializa el estado de los botones
+actualizarEstadoBotones(); 
 const btnParpadeador = document.getElementById("btnParpadeador");
 const btnBarco = document.getElementById("btnBarco");
 const btnPlaneador = document.getElementById("btnPlaneador");
@@ -216,7 +217,7 @@ canvas.addEventListener("click", function(e) {
 });
 
 
-// Método para mostrar información de una célula al pasar el mouse sobre ella
+//Método para mostrar información de una célula al pasar el mouse sobre ella
 const cellInfoPanel = document.getElementById('cellInfoPanel');
 canvas.addEventListener("mousemove", function(e) {
     const rect = canvas.getBoundingClientRect();
