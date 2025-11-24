@@ -147,6 +147,11 @@ btnCambiarN.addEventListener("click", () => {
     if (nuevoN > 100) nuevoN = 100; 
     N = nuevoN;
 
+    // Mantener un tamaño mínimo por celda
+    const minTamCelda = 10;
+    canvas.width = N * minTamCelda;
+    canvas.height = N * minTamCelda;
+    
     tamanoCelda = canvas.width / N;   
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda);
