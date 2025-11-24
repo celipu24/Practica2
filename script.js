@@ -203,16 +203,17 @@ btnCambiarN.addEventListener("click", () => {
     //añadimos un maximo y un minimo para que visualmente no se recorte y sea visible el mundo     
     if (nuevoN < N_MIN) nuevoN = N_MIN;   
     if (nuevoN > N_MAX) nuevoN = N_MAX; 
-    
-    mundo.ancho = nuevoN;
-    mundo.alto = nuevoN;
     N = nuevoN;
 
-    mundo.crearTablero(); // esto añadirá nuevas celdas sin perder las viejas
+    tamanoCelda = 15;   
+    canvas.width = N * tamanoCelda;
+    canvas.height = N * tamanoCelda;
+        recalcularOffset();
 
-    recalcularOffset();
+    mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
+    recalcularOffset();
 
 });
 
@@ -315,15 +316,15 @@ canvas.addEventListener("click", function(e) {
 const cellInfoPanel = document.getElementById('cellInfoPanel');
 canvas.addEventListener("mousemove", function(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = e.clientX - rect.left - offsetX;
+    const y = e.clientY - rect.top - offsetY;
 
-    const col = Math.min(Math.max(Math.floor((x - offsetX) / tamanoCelda), 0), N - 1);
-    const fila = Math.min(Math.max(Math.floor((y - offsetY) / tamanoCelda), 0), N - 1);
+    const col = Math.floor(x / tamanoCelda);
+    const fila = Math.floor(y / tamanoCelda);
 
+    if (col < 0 || col >= mundo.ancho || fila < 0 || fila >= mundo.alto) return;
 
     const cel = mundo.getCelula(fila, col);
-    const cellInfoPanel = document.getElementById('cellInfoPanel');
     if (cel) {
         cellInfoPanel.innerHTML = `Célula (${fila}, ${col}) - Viva: ${cel.estado ? 'Sí' : 'No'} - Tiempo viva: ${cel.time}`;
     }
