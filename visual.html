@@ -1,43 +1,87 @@
 <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="author" content="Marina Perona, Celia Puga" />
+  <title>El Juego de la Vida</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <html lang ="es"> <!--seleccionamos el idioma español-->
-    <head>
-        <meta charset="UTF-8"> <!--Codificación del documento. De no incluirse, caractéres como la "ñ" -->
-                                <!--o acentos no se mostrarán correctamente-->
-        <meta name="author" content="Marina Perona, Celia Puga"/> <!--Autores del documento-->
-        <title> El Juego de la Vida </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!--Adaptar la página al tamaño de la pantalla-->
-        <link rel="stylesheet" href="style.css">
+  <style>
+    /* --- BACKGROUND: pon aquí la URL de la imagen que quieras --- */
+    :root{
+      /* reemplaza por la URL de la imagen que quieras usar */
+      --bg-image-url: url("https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=1600&q=80");
+      --pink-500: 236,72,153; /* rosa vibrante */
+      --pink-300: 244,114,182; /* rosa más suave */
+      --panel-bg: rgba(0,0,0,0.35);
+    }
 
-  
-    </head>
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background: #071022;}
+    body{
+      background-image: var(--bg-image-url);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      padding:18px;
+    }
 
+    h1,h2{margin:0; text-shadow: 0 2px 8px rgba(0,0,0,0.6)}
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background: var(--panel-bg);
+      padding:8px 12px;
+      border-radius:10px;
+      backdrop-filter: blur(4px);
+    }
 
-    <body>
-        <h1>  El Juego de la Vida</h1>
-        <h2>  Hecho por Celia Puga y Marina Perona</h2>
-        <input type="number" id="inputN" value="40" min="5" max="100"/>
-        <button id="btnCambiarN">Cambiar tamaño</button>
-        <!--IGUAL HAY QUE QUITAR LO DEL STYLE PARA DEJARSELO AL CSS-->
-        <canvas id="lienzo" width="500" height="500" style="border:1px solid #000000;"></canvas>
-        <div id="cellInfoPanel" style="margin-top:10px;"></div>
-        <!--AÑADIR POR QUE PASO VOY-->
-        <p id="pasoPanel">Simulación en marcha: Paso 0</p>
-        <!--AÑADIR QUE CUANDO PULSES UNA CELULA TE DIGA SU POSICIÓN Y CUANTOS PASOS LLEVA-->
-        <button id="Iniciar" >Iniciar</button>
-        <button id="Detener" >Detener</button>
-        <button id="Reanudar" >Reanudar</button>
-        <button id="btnParpadeador">Parpadeador</button>
-        <button id="btnBarco">Barco</button>
-        <button id="btnPlaneador">Planeador</button>
-        <script> console.log("Código ejecutado");</script>
-        <script src="Celula.js"></script>
-        <script src="Mundo.js"></script>
-        <script src="script.js" defer></script>
+    #lienzo{
+      border-radius:10px;
+      background: transparent; /* el canvas es transparente para dejar ver la imagen */
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
 
+    #cellInfoPanel{
+      min-height: 20px;
+      padding:6px 10px;
+      border-radius:8px;
+      background: rgba(255,255,255,0.06);
+      color:#ffdff0;
+      font-size:14px;
+    }
 
-        
-    </body>
+    button,input{padding:6px 10px;border-radius:6px;border:0;background:rgba(255,255,255,0.14);color:#fff;cursor:pointer}
+    button.primary{background:rgba(var(--pink-500),1);color:white}
+  </style>
+</head>
+<body>
+  <h1>El Juego de la Vida</h1>
+  <h2>Hecho por Celia Puga y Marina Perona</h2>
 
-    
-  </html>
+  <div class="controls">
+    <input type="number" id="inputN" value="40" min="5" max="200"/>
+    <button id="btnCambiarN">Cambiar tamaño</button>
+    <button id="Iniciar" class="primary">Iniciar</button>
+    <button id="Detener">Detener</button>
+    <button id="Reanudar">Reanudar</button>
+    <button id="btnParpadeador">Parpadeador</button>
+    <button id="btnBarco">Barco</button>
+    <button id="btnPlaneador">Planeador</button>
+  </div>
+
+  <canvas id="lienzo" width="600" height="600"></canvas>
+
+  <div id="cellInfoPanel" style="margin-top:10px;">Pasa el ratón por encima de una célula para ver información.</div>
+  <p id="pasoPanel">Simulación en marcha: Paso 0</p>
+
+  <script src="Celula.js"></script>
+  <script src="Mundo.js"></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
