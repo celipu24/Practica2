@@ -12,21 +12,30 @@ const btnCambiarN = document.getElementById("btnCambiarN");
 const canvasSize = 500;
 canvas.width = canvasSize;
 canvas.height = canvasSize;
+
 //N es el tamaño del mundo
 let N = 40;
 //N maxima y minima para elegir al cambiar el tamaño
 const N_MIN = 5;
 const N_MAX = 100;
 
-//velocidad a la que se actualiza el mundo (en sg)                
-let velocidad = 10;  
-//CREAMOS EL PROPIO MUNDO      
-let mundo = new Mundo(N);  
 //cuanto ocupa cada celula=celda
 let tamanoCelda = canvasSize / N;
 
+//variables para cuando el canvas no es divisible entre N
+let offsetX = (canvas.width - tamanoCelda * N) / 2;
+let offsetY = (canvas.height - tamanoCelda * N) / 2;
+
+//CREAMOS EL PROPIO MUNDO      
+let mundo = new Mundo(N); 
+
+//velocidad a la que se actualiza el mundo (en sg)                
+var velocidad = 10;  
 var temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
+
+//VARIABLE PARA GUARDAR EL PATRÓN SELECCIONADO
+let patronSeleccionado = null;
 
 //EMPIEZO A PINTAR CÉLULAS
 let click = false;
@@ -35,14 +44,16 @@ let dibujarEstado = true; // true para dibujar vivas, false para muertas
 //PARA DIBUJAR EL MUNDO
 //clearRect(x,y,alto,ancho) borra una zona rectangular.
 contexto.clearRect(0, 0, canvas.width, canvas.height);
-mundo.dibujar(contexto, tamanoCelda);
+mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+
+
 
 //JUEGO
 
 // Realiza un paso de la simulación
 function pasoSimulacion() {
     mundo.actualizarTablero(); //calcula la siguiente generación
-    mundo.dibujar(contexto, tamanoCelda); //dibuja el mundo actualizado
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY); //dibuja el mundo actualizado
     paso++;
     pasoPanel.textContent = "Simulación en marcha: Paso " + paso;
 }
@@ -71,7 +82,7 @@ function poblarAleatorio(prob = 0.05) {
         }
     }
     // dibujamos el resultado inicial
-    mundo.dibujar(contexto, tamanoCelda);
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 }
 
 
@@ -133,7 +144,6 @@ function reanudarSimulacion() {
 
 /*Definimos los patrones(figuras) para que luego al llamar su identificador usemos esta función
 y solo tengamos que declarar en que coordenadas se colocan las vecinas*/
-let patronSeleccionado = null;
 function ponerPatron(patron, fila, col) {
     for (let [df, dc] of patron) {
         let f = fila + df;
@@ -141,7 +151,7 @@ function ponerPatron(patron, fila, col) {
         let cel = mundo.getCelula(f, c);
         cel.setEstado(true);
     }
-    mundo.dibujar(contexto, tamanoCelda);
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 }
 
 /*éste método sirve para que al cambiar la N se recalcule el tamaño de las celdas
@@ -156,8 +166,10 @@ btnCambiarN.addEventListener("click", () => {
     N = nuevoN;
 
     tamanoCelda = canvasSize / N;   
+    offsetX = (canvas.width - tamanoCelda * N) / 2;
+    offsetY = (canvas.height - tamanoCelda * N) / 2;
     mundo = new Mundo(N);             
-    mundo.dibujar(contexto, tamanoCelda);
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 });
 
 
@@ -229,8 +241,8 @@ canvas.addEventListener("click", function(e) {
     const y = e.clientY - rect.top;
 
     tamanoCelda = canvas.width / N;
-    const col = Math.floor(x / tamanoCelda);
-    const fila = Math.floor(y / tamanoCelda);
+    const col = Math.min(Math.max(Math.floor((x - offsetX) / tamanoCelda), 0), N - 1);
+    const fila = Math.min(Math.max(Math.floor((y - offsetY) / tamanoCelda), 0), N - 1);
 
     if (patronSeleccionado) {
         ponerPatron(patronSeleccionado, fila, col);
@@ -242,7 +254,7 @@ canvas.addEventListener("click", function(e) {
         if (simulando && typeof cel.nextEstado !== "undefined") {
             cel.nextEstado = true;
         }
-        mundo.dibujar(contexto, tamanoCelda);
+        mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     }
 });
 
@@ -254,10 +266,12 @@ canvas.addEventListener("mousemove", function(e) {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const col = Math.floor(x / tamanoCelda);
-    const fila = Math.floor(y / tamanoCelda);
+    const col = Math.min(Math.max(Math.floor((x - offsetX) / tamanoCelda), 0), N - 1);
+    const fila = Math.min(Math.max(Math.floor((y - offsetY) / tamanoCelda), 0), N - 1);
+
 
     const cel = mundo.getCelula(fila, col);
+    const cellInfoPanel = document.getElementById('cellInfoPanel');
     if (cel) {
         cellInfoPanel.innerHTML = `Célula (${fila}, ${col}) - Viva: ${cel.estado ? 'Sí' : 'No'} - Tiempo viva: ${cel.time}`;
     }
@@ -265,7 +279,7 @@ canvas.addEventListener("mousemove", function(e) {
 
 
 //DIBUJAMOS EL MUNDO INICIAL
-mundo.dibujar(contexto, tamanoCelda);
+mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 console.log("Juego de la Vida cargado correctamente.");
 
 
