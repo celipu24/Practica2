@@ -8,14 +8,22 @@ const btnCambiarN = document.getElementById("btnCambiarN");
 
 
 //VARIABLES GLOBALES
+//tamaño del canvas para que al aumentar el tamaño de las celdas, este no cambie
+const canvasSize = 500;
+canvas.width = canvasSize;
+canvas.height = canvasSize;
 //N es el tamaño del mundo
 let N = 40;
+//N maxima y minima para elegir al cambiar el tamaño
+const N_MIN = 5;
+const N_MAX = 100;
+
 //velocidad a la que se actualiza el mundo (en sg)                
 let velocidad = 10;  
 //CREAMOS EL PROPIO MUNDO      
 let mundo = new Mundo(N);  
 //cuanto ocupa cada celula=celda
-let tamanoCelda = canvas.width / N;
+let tamanoCelda = canvasSize / N;
 
 var temporizador;       //para controlar la simulación
 let simulando = false; // indica si la simulación está en marcha
@@ -143,16 +151,11 @@ btnCambiarN.addEventListener("click", () => {
     //.value te devuelve el valor de input
     let nuevoN = parseInt(inputN.value);  
     //añadimos un maximo y un minimo para que visualmente no se recorte y sea visible el mundo     
-    if (nuevoN < 5) nuevoN = 5;   
-    if (nuevoN > 100) nuevoN = 100; 
+    if (nuevoN < N_MIN) nuevoN = N_MIN;   
+    if (nuevoN > N_MAX) nuevoN = N_MAX; 
     N = nuevoN;
 
-    // Mantener un tamaño mínimo por celda
-    const minTamCelda = 10;
-    canvas.width = N * minTamCelda;
-    canvas.height = N * minTamCelda;
-    
-    tamanoCelda = canvas.width / N;   
+    tamanoCelda = canvasSize / N;   
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda);
 });
