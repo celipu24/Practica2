@@ -59,34 +59,55 @@ function poblarAleatorio(prob = 0.05) {
 }
 
 
+// Actualiza el estado habilitado/deshabilitado de los botones
+function actualizarEstadoBotones() {
+    const bStart = document.getElementById("Iniciar");
+    const bStop  = document.getElementById("Detener");
+    const bRean  = document.getElementById("Reanudar");
+    if (bStart) bStart.disabled = simulando;
+    if (bStop)  bStop.disabled  = !simulando;
+    if (bRean)  bRean.disabled  = simulando; // opcional: reanudar no tiene sentido si ya corre
+}
 
 
 function iniciarSimulacion() {
-    // Si no hay ninguna célula viva, inicializamos con aleatorio
-    if (mundo.contarCelulasVivas() === 0) {
+    // Evita crear múltiples timers si ya está corriendo
+    if (simulando) return;
+
+    // Si no hay ninguna célula viva, evita iniciar (tu comportamiento actual)
+    if (contarCelulasVivas() === 0) {
         console.log("No hay células vivas. No se puede iniciar la simulación.");
         actualizarEstadoBotones();
         return;
     }
 
     simulando = true;
+    // actualizar botones inmediatamente
+    actualizarEstadoBotones();
+
+    // guarda el id del intervalo en temporizador (hay solo uno gracias al guard)
     temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
 }
 
 
 function detenerSimulacion() {
     if (!simulando) return; // ya está detenido
+
     simulando = false;
-    clearInterval(temporizador);
-    temporizador = null;
+
+    if (temporizador !== null) {
+        clearInterval(temporizador);
+        temporizador = null;
+    }
+
+    // actualizar botones
+    actualizarEstadoBotones();
 }
 
 function reanudarSimulacion() {
-    if (simulando) return; // ya está corriendo
+    if (simulando) return;
     iniciarSimulacion();
 }
-
-
 
 //-------------------EVENTOS TECLADO--------------------
 //detección de varias teclas a la vez
@@ -113,11 +134,15 @@ teclas[e.code] = false;
 
 //-------------------EVENTOS BOTONES--------------------
 //añadimos los eventos de botón
-document.getElementById("Iniciar").onclick = () => iniciarSimulacion();
-document.getElementById("Detener").onclick = () => detenerSimulacion();
-document.getElementById("Reanudar").onclick = () => reanudarSimulacion();
+const btnIniciar = document.getElementById("Iniciar");
+const btnDetener = document.getElementById("Detener");
+const btnReanudar = document.getElementById("Reanudar");
 
+if (btnIniciar) btnIniciar.addEventListener('click', iniciarSimulacion);
+if (btnDetener) btnDetener.addEventListener('click', detenerSimulacion);
+if (btnReanudar) btnReanudar.addEventListener('click', reanudarSimulacion);
 
+actualizarEstadoBotones(); //inicializa el estado de los botones
 
 //-------------------EVENTOS RATÓN--------------------
 canvas.addEventListener("click", function(e) {
