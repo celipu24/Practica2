@@ -8,27 +8,16 @@
 
   <style>
    
-    :root{
-      
-      --bg-image-url: url("https://img.freepik.com/fotos-premium/modelo-abstracto-adn-3d-renderizado-animacion-sobre-fondo-rosa-pastel-azul-brillante-rotacion-doble-helice-adn-conceptos-ciencia-medicina-diseno-fondo-bucle-informacion-genetica_599740-1602.jpg");
-      --pink-500: 236,72,153; 
-
-      --pink-300: 244,114,182;
-      --panel-bg: rgba(0,0,0,0.35);
-    }
-
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background: #071022;}
-    body{
-      background-image: var(--bg-image-url);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:12px;
-      padding:18px;
+    body {
+      background: #c67b99;      
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+      color: #5a033a;           
     }
 
     h1,h2{margin:0; text-shadow: 0 2px 8px rgba(0,0,0,0.6)}
@@ -42,10 +31,11 @@
       backdrop-filter: blur(4px);
     }
 
-    #lienzo{
-      border-radius:10px;
-      background: transparent; /* el canvas es transparente para dejar ver la imagen */
-      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    #lienzo {
+      border: 2px solid #ff8ac3;   
+      border-radius: 10px;
+      background: white;           
+      box-shadow: 0 6px 25px rgba(0,0,0,0.15);
     }
 
     #cellInfoPanel{
