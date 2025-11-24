@@ -153,7 +153,24 @@ if (btnDetener) btnDetener.addEventListener('click', detenerSimulacion);
 if (btnReanudar) btnReanudar.addEventListener('click', reanudarSimulacion);
 
 actualizarEstadoBotones(); //inicializa el estado de los botones
-
+const btnParpadeador = document.getElementById("btnParpadeador");
+const btnBarco = document.getElementById("btnBarco");
+const btnPlaneador = document.getElementById("btnPlaneador");
+if (btnParpadeador) {
+    btnParpadeador.addEventListener('click', function() {
+        ponerPatron([[-1,0],[0,0],[1,0]], 10, 10); // Parpadeador en (10,10)
+    }); 
+}
+if (btnBarco) {
+    btnBarco.addEventListener('click', function() {
+        ponerPatron([[0,0],[0,1],[1,0],[1,2],[2,1]], 15, 15); // Barco en (15,15)
+    }); 
+}
+if (btnPlaneador) {
+    btnPlaneador.addEventListener('click', function() {
+        ponerPatron([[0,1],[1,2],[2,0],[2,1],[2,2]], 20, 20); // Planeador en (20,20)
+    });
+}
 //-------------------EVENTOS RATÓN--------------------
 canvas.addEventListener("click", function(e) {
 
@@ -192,6 +209,16 @@ canvas.addEventListener("mousemove", function(e) {
     }
 });
 
+//-------------------PATRONES PREDEFINIDOS--------------------
+function ponerPatron(patron, fila, col) {
+    for (let [df, dc] of patron) {
+        let f = fila + df;
+        let c = col + dc;
+        let cel = mundo.getCelula(f, c);
+        cel.setEstado(true);
+    }
+    mundo.dibujar(contexto, tamanoCelda);
+}
 
 //DIBUJAMOS EL MUNDO INICIAL
 mundo.dibujar(contexto, tamanoCelda);
