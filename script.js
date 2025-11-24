@@ -8,23 +8,24 @@ const btnCambiarN = document.getElementById("btnCambiarN");
 
 
 //VARIABLES GLOBALES
-//tamaño del canvas para que al aumentar el tamaño de las celdas, este no cambie
-const canvasSize = 500;
-canvas.width = canvasSize;
-canvas.height = canvasSize;
-
 //N es el tamaño del mundo
 let N = 40;
+
+//cuanto ocupa cada celula=celda
+let tamanoCelda = 15;
+
+//tamaño del canvas para que al aumentar el tamaño de las celdas, este no cambie
+canvas.width = N*tamanoCelda;
+canvas.height = N*tamanoCelda;
+
 //N maxima y minima para elegir al cambiar el tamaño
 const N_MIN = 5;
 const N_MAX = 100;
 
-//cuanto ocupa cada celula=celda
-let tamanoCelda = canvasSize / N;
 
 //variables para cuando el canvas no es divisible entre N
-let offsetX = (canvas.width - tamanoCelda * N) / 2;
-let offsetY = (canvas.height - tamanoCelda * N) / 2;
+let offsetX = 0;
+let offsetY = 0;
 
 // ------------------- DIBUJO DE LA CUADRÍCULA --------------------
 function dibujarCuadricula() {
@@ -204,9 +205,11 @@ btnCambiarN.addEventListener("click", () => {
     if (nuevoN > N_MAX) nuevoN = N_MAX; 
     N = nuevoN;
 
-    tamanoCelda = canvasSize / N;   
-    offsetX = (canvas.width - tamanoCelda * N) / 2;
-    offsetY = (canvas.height - tamanoCelda * N) / 2;
+    tamanoCelda = 15;   
+    canvas.width = N * tamanoCelda;
+    canvas.height = N * tamanoCelda;
+        recalcularOffset();
+
     mundo = new Mundo(N);             
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
@@ -214,6 +217,12 @@ btnCambiarN.addEventListener("click", () => {
 });
 
 
+function recalcularOffset() {
+    const boardSize = N * tamanoCelda;
+    offsetX = Math.floor((canvas.width  - boardSize) / 2);
+    offsetY = Math.floor((canvas.height - boardSize) / 2);
+}
+recalcularOffset();
 
 //-------------------EVENTOS TECLADO--------------------
 //detección de varias teclas a la vez
@@ -275,31 +284,30 @@ if (btnPlaneador) {
         console.log("Planeador seleccionado. Haz clic en el tablero para colocarlo.");
     });
 }
+
+
 //-------------------EVENTOS RATÓN--------------------
 canvas.addEventListener("click", function(e) {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    tamanoCelda = canvas.width / N;
-    const col = Math.min(Math.max(Math.floor((x - offsetX) / tamanoCelda), 0), N - 1);
-    const fila = Math.min(Math.max(Math.floor((y - offsetY) / tamanoCelda), 0), N - 1);
+    const col = Math.floor((x - offsetX) / tamanoCelda);
+    const fila = Math.floor((y - offsetY) / tamanoCelda);
+
+
+     if (col < 0 || col >= N || fila < 0 || fila >= N) return;
 
     if (patronSeleccionado) {
         ponerPatron(patronSeleccionado, fila, col);
         //el patrón se resetea después de colocar alguna de las figuras
         patronSeleccionado = null; 
-    }else {
-        const cel = mundo.getCelula(fila, col);
-        cel.setEstado(true);
-        if (simulando && typeof cel.nextEstado !== "undefined") {
-            cel.nextEstado = true;
-        }
-        mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
-        dibujarCuadricula();
-
+        return;
     }
-});
+    mundo.getCelula(fila, col).setEstado(true);
+    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
+    dibujarCuadricula();
+    });
 
 
 //Método para mostrar información de una célula al pasar el mouse sobre ella
