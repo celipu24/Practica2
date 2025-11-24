@@ -1,8 +1,8 @@
 var canvas = document.getElementById("lienzo");
 var contexto = canvas.getContext("2d");
-let paso=0;
+let paso=0; //contador de pasos de la simulación
 const pasoPanel = document.getElementById("pasoPanel");
-//constantes para el cambio del tamaño de mundo
+//ELEMENTOS PARA CAMBIAR EL TAMAÑO DEL MUNDO
 const inputN = document.getElementById("inputN");
 const btnCambiarN = document.getElementById("btnCambiarN");
 
@@ -27,19 +27,19 @@ const N_MAX = 100;
 let offsetX = 0;
 let offsetY = 0;
 
-// ------------------- DIBUJO DE LA CUADRÍCULA --------------------
+// DIBUJAR TABLERO CON CUADRÍCULA
 function dibujarCuadricula() {
-    // color rosa sutil para las líneas de la cuadricula
+    //Le ponemos estilo a la cuadrícula
     contexto.save();
-    contexto.strokeStyle = 'rgba(244,114,182,0.12)'; // rosa suave
+    contexto.strokeStyle = 'rgba(244,114,182,0.12)'; 
     contexto.lineWidth = 1;
 
-    // rectángulo del tablero (área usada por las N celdas)
+    // punto de inicio
     const startX = offsetX;
     const startY = offsetY;
     const boardSize = tamanoCelda * N;
 
-    // dibujar verticales
+    // dibujar lineas verticales
     for (let i = 0; i <= N; i++) {
         const x = Math.round(startX + i * tamanoCelda) + 0.5; // +0.5 para líneas nítidas
         contexto.beginPath();
@@ -48,7 +48,7 @@ function dibujarCuadricula() {
         contexto.stroke();
     }
 
-    // dibujar horizontales
+    // dibujar lineas horizontales
     for (let j = 0; j <= N; j++) {
         const y = Math.round(startY + j * tamanoCelda) + 0.5;
         contexto.beginPath();
@@ -57,27 +57,26 @@ function dibujarCuadricula() {
         contexto.stroke();
     }
 
-    contexto.restore();
+    contexto.restore(); 
 }
 
 
-//CREAMOS EL PROPIO MUNDO      
+//creamos el mundo      
 let mundo = new Mundo(N); 
 
-//velocidad a la que se actualiza el mundo (en sg)                
+//velocidad a la que se actualiza el mundo, el temporizador y si está simulando o no         
 var velocidad = 10;  
-var temporizador;       //para controlar la simulación
-let simulando = false; // indica si la simulación está en marcha
+var temporizador;       
+let simulando = false; 
 
-//VARIABLE PARA GUARDAR EL PATRÓN SELECCIONADO
+//variable para el patrón seleccionado
 let patronSeleccionado = null;
 
-//EMPIEZO A PINTAR CÉLULAS
+//variables para el ratón
 let click = false;
 let dibujarEstado = true; // true para dibujar vivas, false para muertas
 
-//PARA DIBUJAR EL MUNDO
-//clearRect(x,y,alto,ancho) borra una zona rectangular.
+//limpiar y dibujar el mundo
 contexto.clearRect(0, 0, canvas.width, canvas.height);
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 dibujarCuadricula();
@@ -85,17 +84,16 @@ dibujarCuadricula();
 
 //JUEGO
 
-// Realiza un paso de la simulación
+//realiza un paso de la simulación
 function pasoSimulacion() {
-    mundo.actualizarTablero(); //calcula la siguiente generación
+    mundo.actualizarTablero(); 
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
     paso++;
     pasoPanel.textContent = "Simulación en marcha: Paso " + paso;
 }
 
-//iniciar simulación
-// Cuenta cuántas células vivas hay en el mundo
+// cuenta cuántas células vivas hay en el mundo
 function contarCelulasVivas() {
     let cont = 0;
     for (let f = 0; f < mundo.ancho; f++) {
@@ -106,72 +104,56 @@ function contarCelulasVivas() {
     return cont;
 }
 
-// Crea células aleatorias SOLO si el mundo está vacío
-function poblarAleatorio(prob = 0.05) {
-    // limpias completamente (creaTablero reinicia celulas y tiempos)
-    mundo.crearTablero();
 
-    for (let f = 0; f < mundo.ancho; f++) {
-        for (let c = 0; c < mundo.ancho; c++) {
-            const viva = Math.random() < prob;
-            mundo.getCelula(f, c).setEstado(viva);
-        }
-    }
-    // dibujamos el resultado inicial
-    mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
-    dibujarCuadricula();
-
-}
-
-
-// Actualiza el estado habilitado/deshabilitado de los botones
+//actualiza el estado de los botones según si se está simulando o no
 function actualizarEstadoBotones() {
     const bStart = document.getElementById("Iniciar");
     const bStop  = document.getElementById("Detener");
     const bRean  = document.getElementById("Reanudar");
     if (bStart) bStart.disabled = simulando;
     if (bStop)  bStop.disabled  = !simulando;
-    if (bRean)  bRean.disabled  = simulando; // opcional: reanudar no tiene sentido si ya corre
+    if (bRean)  bRean.disabled  = simulando; 
 }
 
-
+//Iniciar simulación
 function iniciarSimulacion() {
-    // Evita crear múltiples timers si ya está corriendo
+    // evitamos crear múltiples timers si ya está corriendo
     if (simulando) return;
 
-    // Si no hay ninguna célula viva, evita iniciar (tu comportamiento actual)
+    //verificamos que haya células vivas antes de iniciar
     if (contarCelulasVivas() === 0) {
         console.log("No hay células vivas. No se puede iniciar la simulación.");
         actualizarEstadoBotones();
         return;
     }
-    //reiniciar el contador de pasos al pulsar iniciar
+    //reiniciamos el contador de pasos al pulsar iniciar
     paso = 0; 
     pasoPanel.textContent = "Simulación en marcha: Paso 0";
 
     simulando = true;
-    // actualizar botones inmediatamente
+    // actualizamos el estado de los botones
     actualizarEstadoBotones();
 
-    // guarda el id del intervalo en temporizador (hay solo uno gracias al guard)
-    temporizador = setInterval(pasoSimulacion, 1000 / velocidad); // velocidad = pasos/segundo
+    // iniciar el temporizador
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad);
 }
 
-
+//Detener simulación
 function detenerSimulacion() {
-    if (!simulando) return; // ya está detenido
-
+    if (!simulando) return; 
+    // cambiamos el estado a no simulando
     simulando = false;
-
+    // detener el temporizador
     if (temporizador !== null) {
         clearInterval(temporizador);
         temporizador = null;
     }
 
-    // actualizar botones
+    // actualizamos botones
     actualizarEstadoBotones();
 }
 
+//Reanudar simulación
 function reanudarSimulacion() {
     if (simulando) return;
     simulando = true;
@@ -204,22 +186,22 @@ btnCambiarN.addEventListener("click", () => {
     if (nuevoN < N_MIN) nuevoN = N_MIN;   
     if (nuevoN > N_MAX) nuevoN = N_MAX; 
     N = nuevoN;
-
+    //ajustamos el tamaño de las celdas para que el tablero siga cabiendo en el canvas
     tamanoCelda = 15;   
     canvas.width = N * tamanoCelda;
     canvas.height = N * tamanoCelda;
-
+    //creamos un nuevo mundo con la nueva N
     mundo.ancho = N;
     mundo.alto = N;
-    mundo.crearTablero(); // Mantiene las celdas viejas y añade las nuevas
-
+    mundo.crearTablero();
+    //limpiamos el canvas y dibujamos el nuevo mundo
     recalcularOffset();
     mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
     dibujarCuadricula();
 
 });
 
-
+//recalcula los offsets para centrar el tablero en el canvas
 function recalcularOffset() {
     const boardSize = N * tamanoCelda;
     offsetX = Math.floor((canvas.width  - boardSize) / 2);
@@ -227,7 +209,7 @@ function recalcularOffset() {
 }
 recalcularOffset();
 
-//-------------------EVENTOS TECLADO--------------------
+//teclado
 //detección de varias teclas a la vez
 let teclas = [];
 window.addEventListener("keydown", manejaTeclado, false);
@@ -250,7 +232,7 @@ function limpiaTeclado(e) {
 teclas[e.code] = false;
 }
 
-//-------------------EVENTOS BOTONES--------------------
+//botones
 //añadimos los eventos de botón
 const btnIniciar = document.getElementById("Iniciar");
 const btnDetener = document.getElementById("Detener");
@@ -265,6 +247,8 @@ actualizarEstadoBotones();
 const btnParpadeador = document.getElementById("btnParpadeador");
 const btnBarco = document.getElementById("btnBarco");
 const btnPlaneador = document.getElementById("btnPlaneador");
+
+//eventos para los botones de patrones
 if (btnParpadeador) {
     btnParpadeador.addEventListener('click', function() {
         //posiciones que hacen el parpadeador
@@ -289,7 +273,8 @@ if (btnPlaneador) {
 }
 
 
-//-------------------EVENTOS RATÓN--------------------
+//raton
+//Método para activar células al hacer clic en el canvas
 canvas.addEventListener("click", function(e) {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -314,7 +299,7 @@ canvas.addEventListener("click", function(e) {
     });
 
 
-//Método para mostrar información de una célula al pasar el mouse sobre ella
+//Método para mostrar información de una célula al pasar el raton sobre ella
 const cellInfoPanel = document.getElementById('cellInfoPanel');
 canvas.addEventListener("mousemove", function(e) {
     const rect = canvas.getBoundingClientRect();
@@ -333,7 +318,7 @@ canvas.addEventListener("mousemove", function(e) {
 });
 
 
-//DIBUJAMOS EL MUNDO INICIAL
+//dibujamos el mundo por primera vez
 mundo.dibujar(contexto, tamanoCelda, offsetX, offsetY);
 dibujarCuadricula();
 recalcularOffset();
