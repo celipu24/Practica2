@@ -84,12 +84,10 @@ function iniciarSimulacion() {
         actualizarEstadoBotones();
         return;
     }
-    if(reiniciarPasos){
-        paso = 0; // reinicia el contador de pasos
-        pasoPanel.textContent = "Simulación en marcha: Paso 0";
+    //reiniciar el contador de pasos al pulsar iniciar
+    paso = 0; 
+    pasoPanel.textContent = "Simulación en marcha: Paso 0";
 
-    }
-    
     simulando = true;
     // actualizar botones inmediatamente
     actualizarEstadoBotones();
@@ -115,7 +113,10 @@ function detenerSimulacion() {
 
 function reanudarSimulacion() {
     if (simulando) return;
-    iniciarSimulacion(false); // no reinicia el contador de pasos
+    simulando = true;
+    // actualizar botones
+    actualizarEstadoBotones();
+    temporizador = setInterval(pasoSimulacion, 1000 / velocidad);
 }
 
 //-------------------EVENTOS TECLADO--------------------
